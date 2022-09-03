@@ -21,6 +21,9 @@ const bodyParser = require('body-parser');
 
 
 const {sequelize} = require('./database');
+const globalStatController = require('./controller/global-stat.controller');
+
+
 async function launchServer() {
     const app = express(); // express 인스턴스
     app.use(bodyParser.json());
@@ -33,6 +36,12 @@ async function launchServer() {
     app.get('/global-stat/:cc', (req, res) => {
         const cc = req.params.cc;
     });
+
+    // HTTP요청이 왔을 때 Controller의 함수로 요청을 전달하도록 라우팅 설정
+    app.get('/global-stats', globalStatController.getAll);
+    app.post('global-stats', globalStatController.insertOrUpdate);
+    app.delete('/global-stats', globalStatController.remove);
+
 
     try {
         await sequelize.sync();
