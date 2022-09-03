@@ -15,21 +15,25 @@ async function getAll(req, res) {
 
 // 추가/수정
 async function insertOrUpdate(req, res) {
-    const {cc, date} = req.body;
-    if (!cc || !date) {
-        res.status(400)
-           .json({ error: 'cc and date are required' });
-        return;
-    }
-    const count = await GlobalStat.count({ where: {cc, date} });
-    if (count === 0) {
-        await GlobalStat.create(req.body);
-    } else {
-        await GlobalStat.update(req.body, { where: {cc, date} });
-    }
+    try {
+        const {cc, date} = req.body;
+        if (!cc || !date) {
+            res.status(400)
+            .json({ error: 'cc and date are required' });
+            return;
+        }
+        const count = await GlobalStat.count({ where: {cc, date} });
+        if (count === 0) {
+            await GlobalStat.create(req.body);
+        } else {
+            await GlobalStat.update(req.body, { where: {cc, date} });
+        }
 
-    res.status(200)
-        .json({ result: 'success' });
+        res.status(200)
+            .json({ result: 'success' });
+    } catch (ex) {
+        res.status(500).json({ error: ex.toString() });
+    }
 }
 
 // 삭제
