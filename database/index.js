@@ -16,7 +16,9 @@ const sequelize = new Sequelize(config.database,
                                     dialect: 'mysql'
                                 });
 
+// ~~~.model.js에서 만든 객체 모델을 외부에서 사용할 수 있도록 module.exports에 추가
 module.exports = {
     sequelize,
-    GlobalStat: require('./global-stat.model')(sequelize)
+    GlobalStat: require('./global-stat.model')(sequelize),
+    KeyValue: require('./key-value.model')(sequelize)
 }
