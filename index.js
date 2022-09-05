@@ -22,7 +22,7 @@ const bodyParser = require('body-parser');
 
 const {sequelize} = require('./database');
 const globalStatController = require('./controller/global-stat.controller');
-
+const keyValueController = require('./controller/key-value.controller');
 
 async function launchServer() {
     const app = express(); // express 인스턴스
@@ -37,10 +37,15 @@ async function launchServer() {
         const cc = req.params.cc;
     });
 
-    // HTTP요청이 왔을 때 Controller의 함수로 요청을 전달하도록 라우팅 설정
+    // Router (HTTP요청이 왔을 때 Controller의 함수로 요청을 전달하도록 라우팅 설정)
+    // GlobalStat
     app.get('/global-stats', globalStatController.getAll);
     app.post('/global-stats', globalStatController.insertOrUpdate);
     app.delete('/global-stats', globalStatController.remove);
+    // KeyValue
+    app.get('/key-value/:key', keyValueController.get);
+    app.post('/key-value', keyValueController.insertOrUpdate);
+    app.delete('/key-value/:key', keyValueController.remove);
 
 
     try {
